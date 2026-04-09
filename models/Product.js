@@ -4,38 +4,48 @@ const productSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: true,
+      required: [true, 'Product name is required'],
       trim: true,
     },
     description: {
       type: String,
       trim: true,
+      default: '',
     },
     price: {
       type: Number,
-      required: true,
-      min: 0,
+      required: [true, 'Price is required'],
+      min: [0, 'Price cannot be negative'],
     },
     originalPrice: {
       type: Number,
       min: 0,
+      default: 0,
     },
     category: {
       type: String,
-      required: true,
+      required: [true, 'Category is required'],
+      trim: true,
+    },
+    brand: {
+      type: String,
+      trim: true,
+      default: '',
     },
     image: {
       type: String,
+      default: null,
     },
     images: [String],
     stock: {
       type: Number,
       default: 0,
+      min: 0,
     },
     sku: {
       type: String,
-      unique: true,
       sparse: true,
+      default: null,
     },
     rating: {
       type: Number,
@@ -46,6 +56,7 @@ const productSchema = new mongoose.Schema(
     reviews: {
       type: Number,
       default: 0,
+      min: 0,
     },
     isFeatured: {
       type: Boolean,

@@ -39,10 +39,51 @@ router.get('/:id', async (req, res) => {
 // Create product
 router.post('/', async (req, res) => {
   try {
+    // Validate required fields
+    if (!req.body.name || !req.body.name.trim()) {
+      return res.status(400).json({ success: false, error: 'Product name is required' })
+    }
+    if (req.body.price === undefined || req.body.price === null || isNaN(req.body.price)) {
+      return res.status(400).json({ success: false, error: 'Valid price is required' })
+    }
+    if (!req.body.category || !req.body.category.trim()) {
+      return res.status(400).json({ success: false, error: 'Category is required' })
+    }
+
+    // Ensure numeric fields are numbers
+    req.body.price = parseFloat(req.body.price)
+    req.body.stock = parseInt(req.body.stock) || 0
+
+    // Trim string fields
+    req.body.name = req.body.name.trim()
+    req.body.category = req.body.category.trim()
+    if (req.body.brand) req.body.brand = req.body.brand.trim()
+    if (req.body.description) req.body.description = req.body.description.trim()
+
+    // Remove empty SKU
+    if (!req.body.sku || !req.body.sku.trim()) {
+      delete req.body.sku
+    } else {
+      req.body.sku = req.body.sku.trim()
+    }
+
     const product = new Product(req.body)
     await product.save()
-    res.status(201).json({ success: true, data: product })
+
+    res.status(201).json({
+      success: true,
+      message: 'Product created successfully',
+      data: product,
+    })
   } catch (error) {
+    console.error('Product creation error:', error)
+    
+    // Handle validation errors
+    if (error.name === 'ValidationError') {
+      const messages = Object.values(error.errors).map(err => err.message)
+      return res.status(400).json({ success: false, error: messages.join(', ') })
+    }
+
     res.status(400).json({ success: false, error: error.message })
   }
 })

@@ -7,7 +7,7 @@ mongoose.connect('mongodb://localhost:27017/ecomus-store')
     
     const user = await User.findOneAndUpdate(
       { email: 'admin@test.com' },
-      { name: 'Musharof Chowdhury' },
+      { name: '' },
       { returnDocument: 'after' }
     );
     

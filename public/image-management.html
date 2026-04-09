@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Image Management - Admin Dashboard</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      .image-preview {
+        max-width: 300px;
+        max-height: 300px;
+        object-fit: cover;
+        border-radius: 8px;
+      }
+      .loading {
+        display: none;
+        animation: spin 1s linear infinite;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .loading.active {
+        display: inline-block;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+      <!-- Profile Image Upload Section -->
+      <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
+        <h1 class="text-3xl font-bold mb-6">Image Management</h1>
+
+        <!-- Profile Image Upload -->
+        <div class="mb-8 p-6 bg-gray-50 rounded-lg border border-gray-200">
+          <h2 class="text-2xl font-semibold mb-4">Upload Profile Image</h2>
+          
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Select Image</label>
+            <input
+              type="file"
+              id="profileImageInput"
+              accept="image/*"
+              class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+            />
+            <small class="text-gray-500">Max file size: 5MB</small>
+          </div>
+
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-2">User ID</label>
+            <input
+              type="text"
+              id="userIdInput"
+              placeholder="Enter your user ID"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Authorization Token</label>
+            <input
+              type="password"
+              id="tokenInput"
+              placeholder="Enter your JWT token"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          <button
+            id="uploadProfileBtn"
+            class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition duration-200"
+          >
+            Upload Profile Image
+          </button>
+
+          <div id="uploadProfileStatus" class="mt-4 hidden text-sm"></div>
+        </div>
+
+        <!-- View Profile Image -->
+        <div class="mb-8 p-6 bg-gray-50 rounded-lg border border-gray-200">
+          <h2 class="text-2xl font-semibold mb-4">View Profile Image</h2>
+          
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-2">User ID</label>
+            <input
+              type="text"
+              id="viewUserIdInput"
+              placeholder="Enter user ID to view image"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          <button
+            id="viewProfileBtn"
+            class="bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700 transition duration-200"
+          >
+            View Profile Image
+          </button>
+
+          <div id="viewProfileStatus" class="mt-4 hidden text-sm"></div>
+          <div id="profileImageContainer" class="mt-4"></div>
+        </div>
+
+        <!-- Remove Profile Image -->
+        <div class="mb-8 p-6 bg-gray-50 rounded-lg border border-gray-200">
+          <h2 class="text-2xl font-semibold mb-4">Remove Profile Image</h2>
+          
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-2">User ID</label>
+            <input
+              type="text"
+              id="deleteUserIdInput"
+              placeholder="Enter user ID"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Authorization Token</label>
+            <input
+              type="password"
+              id="deleteTokenInput"
+              placeholder="Enter your JWT token"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          <button
+            id="deleteProfileBtn"
+            class="bg-red-600 text-white px-6 py-2 rounded-md hover:bg-red-700 transition duration-200"
+          >
+            Remove Profile Image
+          </button>
+
+          <div id="deleteProfileStatus" class="mt-4 hidden text-sm"></div>
+        </div>
+
+        <!-- Image Stats -->
+        <div class="p-6 bg-gray-50 rounded-lg border border-gray-200">
+          <h2 class="text-2xl font-semibold mb-4">Image Statistics</h2>
+          
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Authorization Token</label>
+            <input
+              type="password"
+              id="statsTokenInput"
+              placeholder="Enter your JWT token"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          <button
+            id="getStatsBtn"
+            class="bg-purple-600 text-white px-6 py-2 rounded-md hover:bg-purple-700 transition duration-200"
+          >
+            Get Image Stats
+          </button>
+
+          <div id="statsContainer" class="mt-4"></div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const API_BASE = 'http://localhost:5006/api'
+
+      // Upload Profile Image
+      document.getElementById('uploadProfileBtn').addEventListener('click', async () => {
+        const file = document.getElementById('profileImageInput').files[0]
+        const userId = document.getElementById('userIdInput').value
+        const token = document.getElementById('tokenInput').value
+        const statusDiv = document.getElementById('uploadProfileStatus')
+
+        if (!file || !userId || !token) {
+          statusDiv.innerHTML = '<p class="text-red-600">❌ Please fill all fields</p>'
+          statusDiv.classList.remove('hidden')
+          return
+        }
+
+        const formData = new FormData()
+        formData.append('profileImage', file)
+
+        statusDiv.innerHTML = '<p class="text-blue-600"><span class="loading active">⏳</span> Uploading...</p>'
+        statusDiv.classList.remove('hidden')
+
+        try {
+          const response = await fetch(`${API_BASE}/images/upload/profile`, {
+            method: 'POST',
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            body: formData,
+          })
+
+          const data = await response.json()
+
+          if (data.success) {
+            statusDiv.innerHTML = `
+              <p class="text-green-600">✅ Image uploaded successfully!</p>
+              <p class="text-gray-600 text-sm mt-2">Size: ${(data.data.imageSize / 1024).toFixed(2)} KB</p>
+              <p class="text-gray-600 text-sm">Type: ${data.data.imageMimeType}</p>
+            `
+            document.getElementById('profileImageInput').value = ''
+          } else {
+            statusDiv.innerHTML = `<p class="text-red-600">❌ ${data.error}</p>`
+          }
+        } catch (error) {
+          statusDiv.innerHTML = `<p class="text-red-600">❌ Error: ${error.message}</p>`
+        }
+      })
+
+      // View Profile Image
+      document.getElementById('viewProfileBtn').addEventListener('click', async () => {
+        const userId = document.getElementById('viewUserIdInput').value
+        const statusDiv = document.getElementById('viewProfileStatus')
+        const container = document.getElementById('profileImageContainer')
+
+        if (!userId) {
+          statusDiv.innerHTML = '<p class="text-red-600">❌ Please enter user ID</p>'
+          statusDiv.classList.remove('hidden')
+          return
+        }
+
+        statusDiv.innerHTML = '<p class="text-blue-600"><span class="loading active">⏳</span> Loading...</p>'
+        statusDiv.classList.remove('hidden')
+        container.innerHTML = ''
+
+        try {
+          const response = await fetch(`${API_BASE}/images/profile/${userId}`)
+          const data = await response.json()
+
+          if (data.success) {
+            const imageUrl = data.data.profileImage
+            if (imageUrl) {
+              container.innerHTML = `
+                <div class="mt-4">
+                  <img src="${imageUrl}" alt="Profile" class="image-preview mb-2">
+                  <p class="text-gray-600 text-sm">Image Type: ${data.data.imageType}</p>
+                  <p class="text-gray-600 text-xs break-all">src: ${imageUrl.substring(0, 100)}...</p>
+                </div>
+              `
+              statusDiv.innerHTML = '<p class="text-green-600">✅ Image loaded successfully!</p>'
+            } else {
+              statusDiv.innerHTML = '<p class="text-yellow-600">⚠️ No image found for this user</p>'
+            }
+          } else {
+            statusDiv.innerHTML = `<p class="text-red-600">❌ ${data.error}</p>`
+          }
+        } catch (error) {
+          statusDiv.innerHTML = `<p class="text-red-600">❌ Error: ${error.message}</p>`
+        }
+      })
+
+      // Delete Profile Image
+      document.getElementById('deleteProfileBtn').addEventListener('click', async () => {
+        const userId = document.getElementById('deleteUserIdInput').value
+        const token = document.getElementById('deleteTokenInput').value
+        const statusDiv = document.getElementById('deleteProfileStatus')
+
+        if (!userId || !token) {
+          statusDiv.innerHTML = '<p class="text-red-600">❌ Please fill all fields</p>'
+          statusDiv.classList.remove('hidden')
+          return
+        }
+
+        statusDiv.innerHTML = '<p class="text-blue-600"><span class="loading active">⏳</span> Deleting...</p>'
+        statusDiv.classList.remove('hidden')
+
+        try {
+          const response = await fetch(`${API_BASE}/images/profile/${userId}`, {
+            method: 'DELETE',
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
+
+          const data = await response.json()
+
+          if (data.success) {
+            statusDiv.innerHTML = '<p class="text-green-600">✅ Image removed successfully!</p>'
+          } else {
+            statusDiv.innerHTML = `<p class="text-red-600">❌ ${data.error}</p>`
+          }
+        } catch (error) {
+          statusDiv.innerHTML = `<p class="text-red-600">❌ Error: ${error.message}</p>`
+        }
+      })
+
+      // Get Image Stats
+      document.getElementById('getStatsBtn').addEventListener('click', async () => {
+        const token = document.getElementById('statsTokenInput').value
+        const container = document.getElementById('statsContainer')
+
+        if (!token) {
+          container.innerHTML = '<p class="text-red-600">❌ Please enter token</p>'
+          return
+        }
+
+        container.innerHTML = '<p class="text-blue-600"><span class="loading active">⏳</span> Loading stats...</p>'
+
+        try {
+          const response = await fetch(`${API_BASE}/images/stats`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
+
+          const data = await response.json()
+
+          if (data.success) {
+            container.innerHTML = `
+              <div class="grid grid-cols-3 gap-4">
+                <div class="bg-blue-50 p-4 rounded">
+                  <p class="text-gray-600 text-sm">Users with Images</p>
+                  <p class="text-2xl font-bold text-blue-600">${data.data.usersWithImages}</p>
+                </div>
+                <div class="bg-green-50 p-4 rounded">
+                  <p class="text-gray-600 text-sm">Products with Images</p>
+                  <p class="text-2xl font-bold text-green-600">${data.data.productsWithImages}</p>
+                </div>
+                <div class="bg-purple-50 p-4 rounded">
+                  <p class="text-gray-600 text-sm">Total Images</p>
+                  <p class="text-2xl font-bold text-purple-600">${data.data.totalImages}</p>
+                </div>
+              </div>
+            `
+          } else {
+            container.innerHTML = `<p class="text-red-600">❌ ${data.error}</p>`
+          }
+        } catch (error) {
+          container.innerHTML = `<p class="text-red-600">❌ Error: ${error.message}</p>`
+        }
+      })
+    </script>
+  </body>
+</html>

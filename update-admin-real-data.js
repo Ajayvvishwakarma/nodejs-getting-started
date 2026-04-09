@@ -8,18 +8,18 @@ mongoose.connect('mongodb://localhost:27017/ecomus-store')
     const user = await User.findOneAndUpdate(
       { email: 'admin@test.com' },
       {
-        name: 'Musharof Chowdhury',
-        firstName: 'Musharof',
-        lastName: 'Chowdhury',
-        phone: '+880 1700-000000',
+        name: '',
+        firstName: '',
+        lastName: '',
+        phone: '+ -',
         bio: 'System Administrator & E-commerce Manager',
         taxId: 'TAX-2024-001',
         address: {
-          street: '123 Business Avenue',
-          city: 'Dhaka',
-          state: 'Dhaka Division',
-          country: 'Bangladesh',
-          postalCode: '1205'
+          street: '  ',
+          city: '',
+          state: '',
+          country: '',
+          postalCode: ''
         }
       },
       { returnDocument: 'after' }
