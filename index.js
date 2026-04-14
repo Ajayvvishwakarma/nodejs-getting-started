@@ -111,6 +111,7 @@ app.get('/admin/panel', (req, res) => {
 // API Routes
 const { router: authRouter } = require('./routes/auth')
 app.use('/api/products', require('./routes/products'))
+app.use('/api/upload', require('./routes/upload'))
 app.use('/api/orders', require('./routes/orders'))
 app.use('/api/auth', authRouter)
 app.use('/api/dashboard', require('./routes/dashboard'))
