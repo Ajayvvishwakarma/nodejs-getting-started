@@ -1,0 +1,1 @@
+This folder stores uploaded product images. Do not delete unless you want to remove all uploaded images.
